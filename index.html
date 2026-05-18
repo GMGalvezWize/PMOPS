@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProjectOps Master: Hub de Automatización</title>
+    <title>ProjectOps Master: Hub & Gem de Automatización</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Chosen Palette: Warm Neutrals (Stone/Amber/Teal) -->
-    <!-- Application Structure Plan: The SPA uses an interactive "Mentor Dashboard" structure. It features a bilingual header with an instant language toggle (ES/EN). The structure contains: 1. Methodology section showing our translation philosophy. 2. A dynamic line chart highlighting admin hour savings (instantly translating labels and legends). 3. A bilingual knowledge hub categorized with tabbed interfaces. 4. A solution simulator that translates operational "pain points" into a clear, non-technical translation sequence. Chosen to give PMs an engaging, easily digestible, and personalized interactive experience. -->
+    <!-- Application Structure Plan: The SPA uses an interactive "Mentor Dashboard" structure. 
+         - A bilingual header with an instant language toggle (ES/EN) and a direct link to the Google Gem.
+         - Methodology section showing our translation philosophy.
+         - A dynamic line chart highlighting admin hour savings.
+         - A bilingual knowledge hub categorized with tabbed interfaces.
+         - A solution simulator that translates operational "pain points" into a clear, non-technical translation sequence.
+         - NEW: A live AI Chat interface acting as the "ProjectOps Master Gem" directly within the page, utilizing Gemini 2.5 API with exponential backoff retries.
+    -->
     <!-- Visualization & Content Choices: 
          1. Interactive Cards -> Methodology -> Goal: Inform -> Provides a step-by-step framework in the selected language.
          2. Dynamic Line Chart -> Chart.js -> Goal: Compare -> Shows manual vs automated admin time, translating labels, tooltips, and legends on the fly.
          3. Tabbed Resource Hub -> Goal: Organize -> Groups official references and communication rules per tool, switching languages seamlessly.
-         4. Live Simulator -> Goal: Engage & Solve -> Interactive dropdown that instantly renders a PM solution workflow in English or Spanish.
+         4. Live Simulator -> Goal: Engage & Solve -> Interactive dropdown that instantly renders a PM solution workflow.
+         5. Live Gemini Chat Assistant -> Goal: Interact & Consult -> Connects directly to Gemini 2.5 using the exact custom instructions from your Gem.
          Libraries: Chart.js via CDN. NO SVG/Mermaid graphics are utilized. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -51,15 +59,24 @@
             color: white;
             border-color: #d97706;
         }
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased font-normal">
 
     <header class="bg-stone-900 text-stone-50 py-8 px-4 shadow-md">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <h1 id="header-title" class="text-3xl font-bold tracking-tight">⚙️ ProjectOps Master</h1>
                 <p id="header-sub" class="mt-2 text-stone-300 text-lg">Traduciendo el caos operativo en flujos lógicos y automatizados.</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <a href="https://gemini.google.com/gem/1igz_2q4VoLbuihoC8vgrNMXVRiwO6X3p?usp=sharing" target="_blank" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-1.5 px-3 rounded-md transition-colors shadow-sm">
+                        <span>✨</span> <span id="lbl-open-gem">Abrir Gem Oficial en Google</span>
+                    </a>
+                </div>
             </div>
             <div class="flex items-center gap-4">
                 <div class="bg-stone-800 px-4 py-2 rounded-lg border border-stone-700 text-right">
@@ -103,6 +120,49 @@
                     <div class="text-3xl mb-3">🔗</div>
                     <h3 id="step4-title" class="font-bold text-lg text-teal-800 mb-2">4. Fuentes Oficiales</h3>
                     <p id="step4-desc" class="text-sm text-stone-600">Provee el enlace exacto (gratuito/verificado) para que puedan ver capturas y profundizar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE GEM CHAT ASSISTANT INTEGRATION -->
+        <section id="gem-assistant-section" class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 flex flex-col justify-between">
+                <div>
+                    <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase" id="lbl-gem-badge">Gem Integrado</span>
+                    <h2 id="gem-chat-title" class="text-2xl font-bold text-stone-800 mt-2 mb-4">Pregúntale al ProjectOps Master</h2>
+                    <p id="gem-chat-desc" class="text-stone-600 text-sm mb-4 leading-relaxed">Prueba las instrucciones de tu custom Gem directamente en esta ventana. Describe tu problema manual con Jira, Sheets o Workspace y obtén una traducción de procesos instantánea.</p>
+                </div>
+                
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3 mt-4">
+                    <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider" id="lbl-quick-prompts">Preguntas Rápidas de Prueba</h4>
+                    <button onclick="sendQuickPrompt('updates_friday')" class="w-full text-left text-xs bg-white hover:bg-stone-100 p-2.5 rounded border border-stone-200 text-stone-700 hover:text-stone-900 transition-colors block font-medium" id="qp-1">¿Cómo automatizo las actualizaciones de estado de los viernes?</button>
+                    <button onclick="sendQuickPrompt('sheets_jira')" class="w-full text-left text-xs bg-white hover:bg-stone-100 p-2.5 rounded border border-stone-200 text-stone-700 hover:text-stone-900 transition-colors block font-medium" id="qp-2">¿Cómo conecto Jira con un Google Sheet gratis?</button>
+                    <button onclick="sendQuickPrompt('jira_blocks')" class="w-full text-left text-xs bg-white hover:bg-stone-100 p-2.5 rounded border border-stone-200 text-stone-700 hover:text-stone-900 transition-colors block font-medium" id="qp-3">Quiero una regla para alertar si un ticket se bloquea</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 flex flex-col bg-stone-950 rounded-2xl border border-stone-800 shadow-inner overflow-hidden h-[500px]">
+                <div class="bg-stone-900 px-6 py-4 border-b border-stone-800 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span class="text-stone-200 font-semibold text-sm" id="lbl-assistant-online">Asistente Virtual (Gem v1.2)</span>
+                    </div>
+                    <button onclick="clearChat()" class="text-stone-400 hover:text-stone-200 text-xs font-medium" id="btn-clear-chat">Limpiar Chat</button>
+                </div>
+
+                <div id="chat-window" class="chat-container p-6 flex-1 space-y-4">
+                    <!-- Initial Welcome Message from System -->
+                    <div class="flex gap-3 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">POM</div>
+                        <div class="bg-stone-900 text-stone-100 p-4 rounded-2xl rounded-tl-none border border-stone-800">
+                            <p class="text-sm" id="chat-welcome-msg">¡Hola! Soy tu mentor ProjectOps Master. Cuéntame qué tarea manual te está consumiendo el tiempo hoy y diseñaremos juntos un flujo automatizado paso a paso sin programar nada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-900 p-4 border-t border-stone-800 flex gap-2">
+                    <input type="text" id="chat-input" class="flex-1 bg-stone-800 text-stone-100 placeholder-stone-400 border border-stone-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="Escribe tu problema aquí...">
+                    <button onclick="triggerMessageSend()" id="btn-send-chat" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-5 py-3 rounded-xl transition-colors text-sm">Enviar</button>
                 </div>
             </div>
         </section>
@@ -301,10 +361,30 @@
         let currentLang = 'es';
         let impactChart = null;
 
+        // System Prompts used for the integrated Gemini Custom Gem
+        const systemPromptES = `Eres "ProjectOps Master", un mentor experto en Project Management Office (PMO) y optimización de procesos. Tu superpoder es traducir el caos operativo de un proyecto en flujos lógicos automatizados, explicados para personas NO técnicas.
+Le hablas a Project Managers (Agile o Tradicionales) que están saturados de trabajo administrativo, pero que no saben programar, ni son administradores avanzados de Jira. Tu tono es empático, ultra práctico, estructurado y paciente. No asumes que el usuario conoce la terminología técnica; tu misión es llevarlo de la mano desde el "tengo este problema manual" hasta el "ya lo automaticé".
+
+Cuando te pregunten sobre cómo optimizar un proceso o resolver un problema, DEBES estructurar tu respuesta en este estricto orden:
+1. Empatizar y Traducir el Dolor: Identifica la ineficiencia. Traduce ese problema humano a una lógica simple de "Entrada -> Proceso -> Salida" sin usar tecnicismos.
+2. Explicar la Lógica del Flujo (El "Plano Conceptual"): Explica cómo funcionará la solución usando lenguaje cotidiano de gestión de proyectos antes de abrir cualquier herramienta.
+3. Guía de Implementación Paso a Paso ("¿Dónde hago clic?"): Explica el proceso asumiendo que el PM entra a la herramienta por primera vez. Describe las rutas de los menús usando negritas (ej. "Haz clic en Configuración del Proyecto").
+4. Citar Fuentes Oficiales: Provee un enlace útil o menciona que consulte las guías de Jira o Sheets oficiales según corresponda. Usa solo enlaces oficiales verificados de Atlassian o Google Workspace.`;
+
+        const systemPromptEN = `You are "ProjectOps Master", an expert mentor in Project Management Office (PMO) and process optimization. Your superpower is translating project operational chaos into automated logical flows, explained for NON-technical people.
+You speak to Project Managers (Agile or Traditional) who are overwhelmed with administrative work, but do not know how to code, nor are they advanced Jira administrators. Your tone is empathetic, ultra-practical, structured, and patient. You do not assume the user knows technical terminology; your mission is to lead them by the hand from "I have this manual problem" to "I already automated it."
+
+When asked how to optimize a process or solve a problem, you MUST structure your answer in this strict order:
+1. Empathize and Translate the Pain: Identify the inefficiency. Translate that human problem into a simple "Input -> Process -> Output" logic without using technical jargon.
+2. Explain the Flow Logic (The "Conceptual Blueprint"): Explain how the solution will work using everyday project management language before opening any tool.
+3. Step-by-Step Implementation Guide ("Where do I click?"): Explain the process assuming the PM is entering the tool for the first time. Describe menu paths using bold text (e.g., "Click on Project Settings").
+4. Cite Official Sources: Provide a useful link or mention to check the official Jira or Google Sheets guides. Only use verified official links from Atlassian or Google Workspace.`;
+
         const i18n = {
             es: {
                 headerTitle: "⚙️ ProjectOps Master",
                 headerSub: "Traduciendo el caos operativo en flujos lógicos y automatizados.",
+                lblOpenGem: "Abrir Gem Oficial en Google",
                 modeText: "Mentor No-Técnico",
                 
                 metTitle: "El Método de los 4 Pasos",
@@ -370,6 +450,22 @@
                 simLabelStep3: "Instrucción al Usuario (Ejemplo):",
                 
                 footerText: "Generado para la optimización de Project Management Offices (PMO).",
+
+                // New Chat labels
+                lblGemBadge: "Gem Integrado",
+                gemChatTitle: "Pregúntale al ProjectOps Master",
+                gemChatDesc: "Prueba las instrucciones de tu custom Gem directamente en esta ventana. Describe tu problema manual con Jira, Sheets o Workspace y obtén una traducción de procesos instantánea.",
+                lblQuickPrompts: "Preguntas Rápidas de Prueba",
+                qp1: "¿Cómo automatizo las actualizaciones de estado de los viernes?",
+                qp2: "¿Cómo conecto Jira con un Google Sheet gratis?",
+                qp3: "Quiero una regla para alertar si un ticket se bloquea",
+                lblAssistantOnline: "Asistente Virtual (Gem v1.2)",
+                btnClearChat: "Limpiar Chat",
+                chatInputPlaceholder: "Escribe tu problema aquí...",
+                btnSendChat: "Enviar",
+                chatWelcomeMsg: "¡Hola! Soy tu mentor ProjectOps Master. Cuéntame qué tarea manual te está consumiendo el tiempo hoy y diseñaremos juntos un flujo automatizado paso a paso sin programar nada.",
+                errCallingGemini: "Hubo un problema de conexión con el mentor. Por favor, reintenta en unos momentos.",
+                lblLoading: "Escribiendo solución paso a paso...",
                 
                 pains: {
                     default: "-- Selecciona un problema operativo --",
@@ -405,13 +501,14 @@
             en: {
                 headerTitle: "⚙️ ProjectOps Master",
                 headerSub: "Translating operational chaos into logical, automated workflows.",
+                lblOpenGem: "Open Official Gem in Google",
                 modeText: "Non-Technical Mentor",
                 
                 metTitle: "The 4-Step Method",
                 metDesc: "As a ProjectOps Master, every interaction with an overwhelmed Project Manager must follow this strict framework. Our goal is to take them by the hand from \"I have this manual issue\" to \"I automated it\", without technical jargon.",
                 
                 step1Title: "1. Empathize and Translate",
-                step1Desc: "Identify the inefficiency. Translate the human problem into a simple logic of \"Input ➔ Process ➔ Output\".",
+                step1Desc: "Identify the inefficiency. Translate the human problem into a simple " + '"Input ➔ Process ➔ Output"' + " logic.",
                 step2Title: "2. Flow Logic",
                 step2Desc: "Explain the conceptual blueprint in everyday PM language before opening any tool interface.",
                 step3Title: "3. Step-by-Step Guide",
@@ -470,6 +567,22 @@
                 simLabelStep3: "User Instruction (Example):",
                 
                 footerText: "Generated for the optimization of Project Management Offices (PMO).",
+
+                // New Chat labels
+                lblGemBadge: "Integrated Gem",
+                gemChatTitle: "Ask the ProjectOps Master",
+                gemChatDesc: "Test your custom Gem instructions directly inside this viewport. Describe your manual PM bottleneck in Jira, Sheets, or Workspace and get an instant process translation.",
+                lblQuickPrompts: "Quick Sample Prompts",
+                qp1: "How do I automate status updates on Fridays?",
+                qp2: "How do I link Jira with Google Sheets for free?",
+                qp3: "I want an alert setup for blocked tickets in Jira",
+                lblAssistantOnline: "Virtual Assistant (Gem v1.2)",
+                btnClearChat: "Clear Chat",
+                chatInputPlaceholder: "Describe your operational chaos here...",
+                btnSendChat: "Send",
+                chatWelcomeMsg: "Hello! I am your ProjectOps Master mentor. Tell me which manual task is draining your time today, and we will map out an automated flow step-by-step without coding a single thing.",
+                errCallingGemini: "There was a connection issue with your mentor. Please retry in a few moments.",
+                lblLoading: "Writing your step-by-step solution...",
                 
                 pains: {
                     default: "-- Select an operational pain point --",
@@ -514,6 +627,7 @@
 
             document.getElementById('header-title').innerHTML = dictionary.headerTitle;
             document.getElementById('header-sub').innerHTML = dictionary.headerSub;
+            document.getElementById('lbl-open-gem').innerHTML = dictionary.lblOpenGem;
             document.getElementById('text-mode').innerHTML = dictionary.modeText;
 
             document.getElementById('met-title').innerHTML = dictionary.metTitle;
@@ -571,6 +685,25 @@
             document.getElementById('lbl-step2').innerHTML = dictionary.simLabelStep2;
             document.getElementById('lbl-step3').innerHTML = dictionary.simLabelStep3;
             document.getElementById('footer-text').innerHTML = dictionary.footerText;
+
+            // Translate Gem Assistant components
+            document.getElementById('lbl-gem-badge').innerHTML = dictionary.lblGemBadge;
+            document.getElementById('gem-chat-title').innerHTML = dictionary.gemChatTitle;
+            document.getElementById('gem-chat-desc').innerHTML = dictionary.gemChatDesc;
+            document.getElementById('lbl-quick-prompts').innerHTML = dictionary.lblQuickPrompts;
+            document.getElementById('qp-1').innerHTML = dictionary.qp1;
+            document.getElementById('qp-2').innerHTML = dictionary.qp2;
+            document.getElementById('qp-3').innerHTML = dictionary.qp3;
+            document.getElementById('lbl-assistant-online').innerHTML = dictionary.lblAssistantOnline;
+            document.getElementById('btn-clear-chat').innerHTML = dictionary.btnClearChat;
+            document.getElementById('chat-input').placeholder = dictionary.chatInputPlaceholder;
+            document.getElementById('btn-send-chat').innerHTML = dictionary.btnSendChat;
+
+            // Translate welcome message if it is the only one in window
+            const chatWindow = document.getElementById('chat-window');
+            if (chatWindow.children.length === 1) {
+                document.getElementById('chat-welcome-msg').innerHTML = dictionary.chatWelcomeMsg;
+            }
 
             buildDropdown();
             updateChart();
@@ -638,8 +771,163 @@
             impactChart.update();
         }
 
+        // Live Chat Assistant Logic (Gemini API Integration)
+        function formatMarkdownToHTML(text) {
+            if (!text) return "";
+            let html = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                // Bold replacement
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // New lines to linebreaks
+                .replace(/\n/g, '<br>')
+                // Bullets list
+                .replace(/(?:^|<br>)\s*-\s+(.*?)(?=<br>|$)/g, '<br>• $1');
+            return html;
+        }
+
+        async function fetchGeminiResponse(userQuery) {
+            const apiKey = ""; // Runtime automatically provisions key
+            const modelName = "gemini-2.5-flash-preview-09-2025";
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+            const sysInstructionText = currentLang === 'es' ? systemPromptES : systemPromptEN;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: sysInstructionText }] }
+            };
+
+            let retries = 5;
+            let delay = 1000;
+
+            for (let attempt = 0; attempt < retries; attempt++) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (text) return text;
+                    }
+                } catch (err) {
+                    // Do not log retry failures to console as per System Guidelines
+                }
+                
+                // Exponential backoff delay
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+            throw new Error("Failed to contact mentor after 5 retries.");
+        }
+
+        function appendUserMessage(text) {
+            const chatWindow = document.getElementById('chat-window');
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'flex gap-3 justify-end max-w-[85%] ml-auto';
+            userMsgDiv.innerHTML = `
+                <div class="bg-amber-600 text-white p-4 rounded-2xl rounded-tr-none">
+                    <p class="text-sm">${formatMarkdownToHTML(text)}</p>
+                </div>
+            `;
+            chatWindow.appendChild(userMsgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function appendAssistantLoading() {
+            const chatWindow = document.getElementById('chat-window');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = "gemini-loading";
+            loadingDiv.className = 'flex gap-3 max-w-[85%]';
+            loadingDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">POM</div>
+                <div class="bg-stone-900 text-stone-400 p-4 rounded-2xl rounded-tl-none border border-stone-800">
+                    <p class="text-sm italic flex items-center gap-2">
+                        <span class="inline-block animate-bounce">⏳</span> ${i18n[currentLang].lblLoading}
+                    </p>
+                </div>
+            `;
+            chatWindow.appendChild(loadingDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function removeAssistantLoading() {
+            const loader = document.getElementById('gemini-loading');
+            if (loader) loader.remove();
+        }
+
+        function appendAssistantMessage(text) {
+            const chatWindow = document.getElementById('chat-window');
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.className = 'flex gap-3 max-w-[85%]';
+            botMsgDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">POM</div>
+                <div class="bg-stone-900 text-stone-100 p-4 rounded-2xl rounded-tl-none border border-stone-800 leading-relaxed">
+                    <p class="text-sm">${formatMarkdownToHTML(text)}</p>
+                </div>
+            `;
+            chatWindow.appendChild(botMsgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        async function triggerMessageSend() {
+            const chatInput = document.getElementById('chat-input');
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+
+            chatInput.value = "";
+            appendUserMessage(userText);
+            appendAssistantLoading();
+
+            try {
+                const response = await fetchGeminiResponse(userText);
+                removeAssistantLoading();
+                appendAssistantMessage(response);
+            } catch (err) {
+                removeAssistantLoading();
+                appendAssistantMessage(i18n[currentLang].errCallingGemini);
+            }
+        }
+
+        function sendQuickPrompt(key) {
+            const dictionary = i18n[currentLang];
+            let text = "";
+            if (key === 'updates_friday') text = currentLang === 'es' ? "¿Cómo automatizo las actualizaciones de estado de los viernes?" : "How do I automate status updates on Fridays?";
+            if (key === 'sheets_jira') text = currentLang === 'es' ? "¿Cómo conecto Jira con un Google Sheet gratis?" : "How do I link Jira with Google Sheets for free?";
+            if (key === 'jira_blocks') text = currentLang === 'es' ? "Quiero una regla para alertar si un ticket se bloquea" : "I want an alert setup for blocked tickets in Jira";
+            
+            document.getElementById('chat-input').value = text;
+            triggerMessageSend();
+        }
+
+        function clearChat() {
+            const chatWindow = document.getElementById('chat-window');
+            chatWindow.innerHTML = `
+                <div class="flex gap-3 max-w-[85%]">
+                    <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white shrink-0 font-bold text-xs">POM</div>
+                    <div class="bg-stone-900 text-stone-100 p-4 rounded-2xl rounded-tl-none border border-stone-800">
+                        <p class="text-sm" id="chat-welcome-msg">${i18n[currentLang].chatWelcomeMsg}</p>
+                    </div>
+                </div>
+            `;
+        }
+
         document.getElementById('pain-selector').addEventListener('change', function() {
             renderScenario(this.value);
+        });
+
+        // Event listener for chat 'Enter' key
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                triggerMessageSend();
+            }
         });
 
         document.addEventListener('DOMContentLoaded', function() {
