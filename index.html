@@ -6,14 +6,14 @@
     <title>ProjectOps Master: Hub de Automatización</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Warm Neutrals (Stone/Amber/Teal) for a calming, professional PM environment -->
-    <!-- Application Structure Plan: The SPA is structured as an interactive "Mentor Dashboard". It starts with the core methodology (4 steps) to establish the mindset. Then, an interactive chart demonstrates the 'Why' (time saved). The core is a tabbed 'Knowledge Base' organizing tools logically (Jira, Sheets, Workspace, Looker) to prevent overwhelming the user. Finally, a 'Solution Simulator' allows practical application of the concepts, bridging the gap between theoretical tools and real PM pain points. -->
+    <!-- Chosen Palette: Warm Neutrals (Stone/Amber/Teal) -->
+    <!-- Application Structure Plan: The SPA uses an interactive "Mentor Dashboard" structure. It features a bilingual header with an instant language toggle (ES/EN). The structure contains: 1. Methodology section showing our translation philosophy. 2. A dynamic line chart highlighting admin hour savings (instantly translating labels and legends). 3. A bilingual knowledge hub categorized with tabbed interfaces. 4. A solution simulator that translates operational "pain points" into a clear, non-technical translation sequence. Chosen to give PMs an engaging, easily digestible, and personalized interactive experience. -->
     <!-- Visualization & Content Choices: 
-         1. Methodology -> Grid of interactive cards -> Goal: Organize & Inform -> Highlights the step-by-step approach without overwhelming text.
-         2. Value of Automation -> Line Chart (Chart.js) -> Goal: Compare -> Visually proves the impact of automation vs manual work over time.
-         3. Knowledge Base -> Tabbed Interface -> Goal: Organize -> Groups complex links and rules by tool category for easy reference.
-         4. Solution Simulator -> Dropdown + Dynamic Text Block -> Goal: Engage & Solve -> Demonstrates the "Translation" step of the persona dynamically. 
-         Library: Chart.js (Canvas). No SVG/Mermaid used. -->
+         1. Interactive Cards -> Methodology -> Goal: Inform -> Provides a step-by-step framework in the selected language.
+         2. Dynamic Line Chart -> Chart.js -> Goal: Compare -> Shows manual vs automated admin time, translating labels, tooltips, and legends on the fly.
+         3. Tabbed Resource Hub -> Goal: Organize -> Groups official references and communication rules per tool, switching languages seamlessly.
+         4. Live Simulator -> Goal: Engage & Solve -> Interactive dropdown that instantly renders a PM solution workflow in English or Spanish.
+         Libraries: Chart.js via CDN. NO SVG/Mermaid graphics are utilized. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -56,14 +56,21 @@
 <body class="antialiased">
 
     <header class="bg-stone-900 text-stone-50 py-8 px-4 shadow-md">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight">⚙️ ProjectOps Master</h1>
-                <p class="mt-2 text-stone-300 text-lg">Traduciendo el caos operativo en flujos lógicos y automatizados.</p>
+                <h1 id="header-title" class="text-3xl font-bold tracking-tight">⚙️ ProjectOps Master</h1>
+                <p id="header-sub" class="mt-2 text-stone-300 text-lg">Traduciendo el caos operativo en flujos lógicos y automatizados.</p>
             </div>
-            <div class="mt-4 md:mt-0 bg-stone-800 px-4 py-2 rounded-lg border border-stone-700">
-                <span class="text-sm text-stone-400 block">Modo:</span>
-                <span class="font-semibold text-amber-500">Mentor No-Técnico</span>
+            <div class="flex items-center gap-4">
+                <div class="bg-stone-800 px-4 py-2 rounded-lg border border-stone-700 text-right">
+                    <span id="label-mode" class="text-xs text-stone-400 block">Modo / Mode:</span>
+                    <span id="text-mode" class="font-semibold text-amber-500 text-sm">Mentor No-Técnico</span>
+                </div>
+                
+                <div class="bg-stone-800 p-1 rounded-lg border border-stone-700 flex">
+                    <button onclick="setLanguage('es')" id="lang-es" class="px-3 py-1 rounded text-xs font-bold transition-all bg-amber-600 text-white">ES</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="px-3 py-1 rounded text-xs font-bold transition-all text-stone-400 hover:text-white">EN</button>
+                </div>
             </div>
         </div>
     </header>
@@ -72,38 +79,38 @@
 
         <section id="metodologia" class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">El Método de los 4 Pasos</h2>
-                <p class="mt-4 text-stone-600">Como ProjectOps Master, cada interacción con un Project Manager saturado debe seguir este marco estricto. Nuestro objetivo es llevarlos de la mano desde el "tengo este problema manual" hasta el "ya lo automaticé", sin jerga técnica.</p>
+                <h2 id="met-title" class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">El Método de los 4 Pasos</h2>
+                <p id="met-desc" class="mt-4 text-stone-600 font-normal">Como ProjectOps Master, cada interacción con un Project Manager saturado debe seguir este marco estricto. Nuestro objetivo es llevarlos de la mano desde el "tengo este problema manual" hasta el "ya lo automaticé", sin jerga técnica.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-3">👂</div>
-                    <h3 class="font-bold text-lg text-teal-800 mb-2">1. Empatizar y Traducir</h3>
-                    <p class="text-sm text-stone-600">Identifica la ineficiencia. Traduce el problema humano a una lógica simple de "Entrada ➔ Proceso ➔ Salida".</p>
+                    <h3 id="step1-title" class="font-bold text-lg text-teal-800 mb-2">1. Empatizar y Traducir</h3>
+                    <p id="step1-desc" class="text-sm text-stone-600">Identifica la ineficiencia. Traduce el problema humano a una lógica simple de "Entrada ➔ Proceso ➔ Salida".</p>
                 </div>
                 <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-3">🗺️</div>
-                    <h3 class="font-bold text-lg text-teal-800 mb-2">2. Lógica del Flujo</h3>
-                    <p class="text-sm text-stone-600">Explica el plano conceptual en lenguaje cotidiano antes de abrir cualquier herramienta.</p>
+                    <h3 id="step2-title" class="font-bold text-lg text-teal-800 mb-2">2. Lógica del Flujo</h3>
+                    <p id="step2-desc" class="text-sm text-stone-600">Explica el plano conceptual en lenguaje cotidiano antes de abrir cualquier herramienta.</p>
                 </div>
                 <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-3">🖱️</div>
-                    <h3 class="font-bold text-lg text-teal-800 mb-2">3. Guía Paso a Paso</h3>
-                    <p class="text-sm text-stone-600">Asume que es su primera vez. Usa negritas para los botones: <strong>Configuración</strong> ➔ <strong>Reglas</strong>.</p>
+                    <h3 id="step3-title" class="font-bold text-lg text-teal-800 mb-2">3. Guía Paso a Paso</h3>
+                    <p id="step3-desc" class="text-sm text-stone-600">Asume que es su primera vez. Usa negritas para los botones: <strong>Configuración</strong> ➔ <strong>Reglas</strong>.</p>
                 </div>
                 <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-3">🔗</div>
-                    <h3 class="font-bold text-lg text-teal-800 mb-2">4. Fuentes Oficiales</h3>
-                    <p class="text-sm text-stone-600">Provee el enlace exacto (gratuito/verificado) para que puedan ver capturas y profundizar.</p>
+                    <h3 id="step4-title" class="font-bold text-lg text-teal-800 mb-2">4. Fuentes Oficiales</h3>
+                    <p id="step4-desc" class="text-sm text-stone-600">Provee el enlace exacto (gratuito/verificado) para que puedan ver capturas y profundizar.</p>
                 </div>
             </div>
         </section>
 
         <section id="impacto" class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">El Impacto de la Automatización</h2>
-                <p class="mt-4 text-stone-600">Por qué hacemos esto: Visualiza la reducción dramática de horas administrativas cuando implementamos flujos lógicos. Los PMs recuperan su tiempo para enfocarse en estrategia.</p>
+                <h2 id="chart-section-title" class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">El Impacto de la Automatización</h2>
+                <p id="chart-section-desc" class="mt-4 text-stone-600">Por qué hacemos esto: Visualiza la reducción dramática de horas administrativas cuando implementamos flujos lógicos. Los PMs recuperan su tiempo para enfocarse en estrategia.</p>
             </div>
             <div class="chart-container">
                 <canvas id="impactChart"></canvas>
@@ -112,8 +119,8 @@
 
         <section id="toolbox" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
             <div class="p-8 pb-0">
-                <h2 class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">Base de Conocimiento y Reglas</h2>
-                <p class="mt-4 text-stone-600 mb-6">Recursos gratuitos, populares y verificados para optimizar el trabajo del PM. Selecciona una categoría para ver enlaces y reglas de comunicación crítica.</p>
+                <h2 id="kb-section-title" class="text-2xl font-bold text-stone-800 border-b-2 border-amber-500 inline-block pb-2">Base de Conocimiento y Reglas</h2>
+                <p id="kb-section-desc" class="mt-4 text-stone-600 mb-6">Recursos gratuitos, populares y verificados para optimizar el trabajo del PM. Selecciona una categoría para ver enlaces y reglas de comunicación crítica.</p>
             </div>
 
             <div class="px-8 border-b border-stone-200 flex flex-wrap gap-2 pb-4">
@@ -126,27 +133,27 @@
             <div class="p-8 bg-stone-50">
                 
                 <div id="tab-jira" class="tab-content active">
-                    <h3 class="text-xl font-bold text-teal-800 mb-4">Automatización de Flujos y Gobernanza en Jira</h3>
+                    <h3 id="tab-jira-title" class="text-xl font-bold text-teal-800 mb-4">Automatización de Flujos y Gobernanza en Jira</h3>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <h4 class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
+                            <h4 id="tab-jira-ref-title" class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
                             <ul class="space-y-3">
                                 <li>
                                     <a href="https://www.atlassian.com/software/jira/guides/automation/overview" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📘</span> Guía de inicio para reglas de automatización
+                                        <span class="mr-2">📘</span> <span id="lnk-jira-guide">Guía de inicio para reglas de automatización</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://www.atlassian.com/software/jira/automation-template-library" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📋</span> Biblioteca de plantillas listas para clonar
+                                        <span class="mr-2">📋</span> <span id="lnk-jira-templates">Biblioteca de plantillas listas para clonar</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="bg-white p-5 rounded-lg border border-amber-200 shadow-sm">
-                            <h4 class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
-                            <p class="text-sm text-stone-700 italic">"No digas solo el Trigger. Estructúralo como una receta de cocina:"</p>
-                            <div class="mt-3 text-sm font-mono bg-stone-100 p-3 rounded text-stone-800">
+                            <h4 id="tab-jira-rule-title" class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
+                            <p id="tab-jira-rule-desc" class="text-sm text-stone-700 italic">"No digas solo el Trigger. Estructúralo como una receta de cocina:"</p>
+                            <div class="mt-3 text-sm font-mono bg-stone-100 p-3 rounded text-stone-800" id="tab-jira-formula">
                                 "CUANDO pase esto...<br>
                                 ➔ REVISAMOS si cumple esto...<br>
                                 ➔ ENTONCES el sistema hace esto"
@@ -156,52 +163,52 @@
                 </div>
 
                 <div id="tab-sheets" class="tab-content">
-                    <h3 class="text-xl font-bold text-teal-800 mb-4">Control de Tiempos y Capacidad (Jira + Sheets)</h3>
+                    <h3 id="tab-sheets-title" class="text-xl font-bold text-teal-800 mb-4">Control de Tiempos y Capacidad (Jira + Sheets)</h3>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <h4 class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
+                            <h4 id="tab-sheets-ref-title" class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
                             <ul class="space-y-3">
                                 <li>
                                     <a href="https://support.atlassian.com/jira-software-cloud/docs/use-jira-cloud-for-sheets/" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📊</span> Sincronización oficial de datos para KPIs y diagramas
+                                        <span class="mr-2">📊</span> <span id="lnk-sheets-sync">Sincronización oficial de datos para KPIs y diagramas</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="bg-white p-5 rounded-lg border border-amber-200 shadow-sm">
-                            <h4 class="font-bold text-amber-700 mb-2">💡 Tip ProjectOps</h4>
-                            <p class="text-sm text-stone-700">Explica esto como "crear un espejo". Lo que pasa en Jira se refleja en Sheets automáticamente, permitiendo usar fórmulas conocidas de Excel sin afectar los datos originales del equipo.</p>
+                            <h4 id="tab-sheets-tip-title" class="font-bold text-amber-700 mb-2">💡 Tip ProjectOps</h4>
+                            <p id="tab-sheets-tip-desc" class="text-sm text-stone-700">Explica esto como "crear un espejo". Lo que pasa en Jira se refleja en Sheets automáticamente, permitiendo usar fórmulas conocidas de Excel sin afectar los datos originales del equipo.</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="tab-workspace" class="tab-content">
-                    <h3 class="text-xl font-bold text-teal-800 mb-4">Gestión y Comunicación en Google Workspace</h3>
+                    <h3 id="tab-ws-title" class="text-xl font-bold text-teal-800 mb-4">Gestión y Comunicación en Google Workspace</h3>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <h4 class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
+                            <h4 id="tab-ws-ref-title" class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
                             <ul class="space-y-3">
                                 <li>
                                     <a href="https://developers.google.com/apps-script/overview" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📜</span> Intro a Google Apps Script para macros
+                                        <span class="mr-2">📜</span> <span id="lnk-ws-overview">Intro a Google Apps Script para macros</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://developers.google.com/apps-script/quickstart/automation" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📧</span> Automatizar reportes de estado por correo
+                                        <span class="mr-2">📧</span> <span id="lnk-ws-automation">Automatizar reportes de estado por correo</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://about.appsheet.com/" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">📱</span> AppSheet: Herramientas sin código
+                                        <span class="mr-2">📱</span> <span id="lnk-ws-appsheet">AppSheet: Herramientas sin código</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="bg-white p-5 rounded-lg border border-amber-200 shadow-sm">
-                            <h4 class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
-                            <p class="text-sm text-stone-700 italic">"Si la solución requiere un script, NO pongas el código solo."</p>
-                            <ul class="mt-3 text-sm text-stone-700 list-disc pl-5 space-y-1">
+                            <h4 id="tab-ws-rule-title" class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
+                            <p id="tab-ws-rule-desc" class="text-sm text-stone-700 italic">"Si la solución requiere un script, NO pongas el código solo."</p>
+                            <ul class="mt-3 text-sm text-stone-700 list-disc pl-5 space-y-1" id="tab-ws-bullets">
                                 <li>Explica qué hace cada línea en español plano.</li>
                                 <li>Da la ruta exacta: <strong>Extensiones</strong> ➔ <strong>Apps Script</strong>.</li>
                                 <li>Diles explícitamente: "borra lo que haya y pega esto".</li>
@@ -211,34 +218,34 @@
                 </div>
 
                 <div id="tab-looker" class="tab-content">
-                    <h3 class="text-xl font-bold text-teal-800 mb-4">Dashboards de Salud del Proyecto (Looker Studio)</h3>
+                    <h3 id="tab-lk-title" class="text-xl font-bold text-teal-800 mb-4">Dashboards de Salud del Proyecto (Looker Studio)</h3>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <h4 class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
+                            <h4 id="tab-lk-ref-title" class="font-semibold text-stone-800 mb-3 border-l-4 border-amber-500 pl-2">Recursos Verificados</h4>
                             <ul class="space-y-3">
                                 <li>
                                     <a href="https://docs.cloud.google.com/data-studio/quick-start-guide" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">🚀</span> Guía de inicio rápido para fuentes de datos
+                                        <span class="mr-2">🚀</span> <span id="lnk-lk-guide">Guía de inicio rápido para fuentes de datos</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://lookerstudio.google.com/navigation/templates" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">🎨</span> Galería de plantillas (PPM y RAG)
+                                        <span class="mr-2">🎨</span> <span id="lnk-lk-templates">Galería de plantillas (PPM y RAG)</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://marketplace.atlassian.com/apps/1232588/looker-studio-connector-for-jira" target="_blank" class="text-blue-700 hover:underline flex items-start">
-                                        <span class="mr-2">🔌</span> Conector nativo Jira a Looker
+                                        <span class="mr-2">🔌</span> <span id="lnk-lk-connector">Conector nativo Jira a Looker</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="bg-white p-5 rounded-lg border border-amber-200 shadow-sm">
-                            <h4 class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
-                            <p class="text-sm text-stone-700 italic">"Explica los conceptos de bases de datos como analogías de proyectos:"</p>
-                            <div class="mt-3 text-sm bg-stone-100 p-3 rounded text-stone-800">
-                                <strong>Dimensión:</strong> "Es la etiqueta o nombre, como el nombre de tu proyecto o el responsable."<br><br>
-                                <strong>Métrica:</strong> "Es el número puro, el dinero que gastaste o los días que estás contando."
+                            <h4 id="tab-lk-rule-title" class="font-bold text-amber-700 mb-2">⚠️ Regla Crítica de Comunicación</h4>
+                            <p id="tab-lk-rule-desc" class="text-sm text-stone-700 italic">"Explica los conceptos de bases de datos como analogías de proyectos:"</p>
+                            <div class="mt-3 text-sm bg-stone-100 p-3 rounded text-stone-800" id="tab-lk-analogies">
+                                <strong>Dimensión:</strong> "Es la etiqueta o nombre, como el nombre de tu proyecto."<br><br>
+                                <strong>Métrica:</strong> "Es el número puro, el dinero que gastaste o los días."
                             </div>
                         </div>
                     </div>
@@ -249,15 +256,12 @@
 
         <section id="simulador" class="bg-stone-900 text-stone-50 p-8 rounded-2xl shadow-lg">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl font-bold text-white mb-4">Simulador de Traducción ProjectOps</h2>
-                <p class="text-stone-400 mb-8">Selecciona un dolor típico de un Project Manager para ver cómo lo estructuramos usando nuestra metodología.</p>
+                <h2 id="sim-section-title" class="text-3xl font-bold text-white mb-4">Simulador de Traducción ProjectOps</h2>
+                <p id="sim-section-desc" class="text-stone-400 mb-8">Selecciona un dolor típico de un Project Manager para ver cómo lo estructuramos usando nuestra metodología.</p>
                 
                 <div class="bg-stone-800 p-2 rounded-lg border border-stone-700 inline-block w-full max-w-xl">
                     <select id="pain-selector" class="w-full bg-stone-800 text-white p-3 rounded focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer appearance-none text-center font-medium">
-                        <option value="default">-- Selecciona un problema operativo --</option>
-                        <option value="updates">"Pierdo 3 horas los viernes persiguiendo actualizaciones de estado."</option>
-                        <option value="capacity">"No sé si mi equipo tiene capacidad para tomar otro proyecto."</option>
-                        <option value="slas">"Los tickets urgentes se quedan estancados sin que nadie avise."</option>
+                        <!-- Dynamic Options populated by JS -->
                     </select>
                 </div>
 
@@ -270,15 +274,15 @@
                         
                         <div class="space-y-4 text-stone-300">
                             <div>
-                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">1.</span> Empatizar y Traducir:</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">1.</span> <span id="lbl-step1">Empatizar y Traducir:</span></h4>
                                 <p class="pl-5 text-sm" id="sol-step1"></p>
                             </div>
                             <div>
-                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">2.</span> Lógica del Flujo:</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">2.</span> <span id="lbl-step2">Lógica del Flujo:</span></h4>
                                 <p class="pl-5 text-sm bg-stone-900 p-3 rounded mt-2 border border-stone-700" id="sol-step2"></p>
                             </div>
                             <div>
-                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">3.</span> Instrucción al Usuario (Ejemplo):</h4>
+                                <h4 class="text-white font-semibold flex items-center gap-2"><span class="text-teal-400">3.</span> <span id="lbl-step3">Instrucción al Usuario:</span></h4>
                                 <p class="pl-5 text-sm italic text-stone-400" id="sol-step3"></p>
                             </div>
                         </div>
@@ -289,34 +293,327 @@
 
     </main>
 
-    <footer class="text-center py-8 text-stone-500 text-sm">
-        <p>Generado para la optimización de Project Management Offices (PMO).</p>
+    <footer class="text-center py-8 text-stone-500 text-sm border-t border-stone-200">
+        <p id="footer-text">Generado para la optimización de Project Management Offices (PMO).</p>
     </footer>
 
     <script>
-        const scenarioData = {
-            updates: {
-                tool: "Apps Script + Workspace",
-                title: "Reportes de Estado Automatizados",
-                step1: "Entiendo perfecto, perseguir a la gente los viernes desgasta. Traduciremos esto a: Entrada (Viernes 9am) ➔ Proceso (Buscar datos en Sheet) ➔ Salida (Enviar correo a los responsables).",
-                step2: "Crearemos un pequeño robot. CUANDO sea viernes a las 9 am ➔ REVISAMOS tu tabla de proyectos ➔ ENTONCES el robot redacta y envía un correo pidiendo la actualización solo a los que tienen tareas pendientes.",
-                step3: "Ve a tu Google Sheet. En el menú superior, haz clic en Extensiones, luego en Apps Script. Borra todo el texto que veas ahí. Te pasaré un código; la primera línea (function enviarCorreos) es la que le da la orden al robot de arrancar..."
+        let currentLang = 'es';
+        let impactChart = null;
+
+        const i18n = {
+            es: {
+                headerTitle: "⚙️ ProjectOps Master",
+                headerSub: "Traduciendo el caos operativo en flujos lógicos y automatizados.",
+                modeText: "Mentor No-Técnico",
+                
+                metTitle: "El Método de los 4 Pasos",
+                metDesc: "Como ProjectOps Master, cada interacción con un Project Manager saturado debe seguir este marco estricto. Nuestro objetivo es llevarlos de la mano desde el \"tengo este problema manual\" hasta el \"ya lo automaticé\", sin jerga técnica.",
+                
+                step1Title: "1. Empatizar y Traducir",
+                step1Desc: "Identifica la ineficiencia. Traduce el problema humano a una lógica simple de \"Entrada ➔ Proceso ➔ Salida\".",
+                step2Title: "2. Lógica del Flujo",
+                step2Desc: "Explica el plano conceptual en lenguaje cotidiano antes de abrir cualquier herramienta.",
+                step3Title: "3. Guía Paso a Paso",
+                step3Desc: "Asume que es su primera vez. Usa negritas para los botones: <strong>Configuración</strong> ➔ <strong>Reglas</strong>.",
+                step4Title: "4. Fuentes Oficiales",
+                step4Desc: "Provee el enlace exacto (gratuito/verificado) para que puedan ver capturas y profundizar.",
+                
+                chartSecTitle: "El Impacto de la Automatización",
+                chartSecDesc: "Por qué hacemos esto: Visualiza la reducción dramática de horas administrativas cuando implementamos flujos lógicos. Los PMs recuperan su tiempo para enfocarse en estrategia.",
+                chartLabelManual: "Horas Administrativas (Flujo Manual)",
+                chartLabelAuto: "Horas Administrativas (Flujo Automatizado)",
+                chartAxisY: "Horas perdidas por PM",
+                chartWeeks: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5', 'Semana 6'],
+                
+                kbSecTitle: "Base de Conocimiento y Reglas",
+                kbSecDesc: "Recursos gratuitos, populares y verificados para optimizar el trabajo del PM. Selecciona una categoría para ver enlaces y reglas de comunicación crítica.",
+                
+                tabJiraTitle: "Automatización de Flujos y Gobernanza en Jira",
+                tabJiraRef: "Recursos Verificados",
+                lnkJiraGuide: "Guía de inicio para reglas de automatización",
+                lnkJiraTemplates: "Biblioteca de plantillas listas para clonar",
+                tabJiraRuleTitle: "⚠️ Regla Crítica de Comunicación",
+                tabJiraRuleDesc: "\"No digas solo el Trigger. Estructúralo como una receta de cocina:\"",
+                tabJiraFormula: "\"CUANDO pase esto...<br>➔ REVISAMOS si cumple esto...<br>➔ ENTONCES el sistema hace esto\"",
+                
+                tabSheetsTitle: "Control de Tiempos y Capacidad (Jira + Sheets)",
+                tabSheetsRef: "Recursos Verificados",
+                lnkSheetsSync: "Sincronización oficial de datos para KPIs y diagramas",
+                tabSheetsTipTitle: "💡 Tip ProjectOps",
+                tabSheetsTipDesc: "Explica esto como \"crear un espejo\". Lo que pasa en Jira se refleja en Sheets automáticamente, permitiendo usar fórmulas conocidas de Excel sin afectar los datos originales del equipo.",
+                
+                tabWsTitle: "Gestión y Comunicación en Google Workspace",
+                tabWsRef: "Recursos Verificados",
+                lnkWsOverview: "Intro a Google Apps Script para macros",
+                lnkWsAutomation: "Automatizar reportes de estado por correo",
+                lnkWsAppsheet: "AppSheet: Herramientas sin código",
+                tabWsRuleTitle: "⚠️ Regla Crítica de Comunicación",
+                tabWsRuleDesc: "\"Si la solución requiere un script, NO pongas el código solo.\"",
+                tabWsBullets: "<li>Explica qué hace cada línea en español plano.</li><li>Da la ruta exacta: <strong>Extensiones</strong> ➔ <strong>Apps Script</strong>.</li><li>Diles explícitamente: \"borra lo que haya y pega esto\".</li>",
+                
+                tabLkTitle: "Dashboards de Salud del Proyecto (Looker Studio)",
+                tabLkRef: "Recursos Verificados",
+                lnkLkGuide: "Guía de inicio rápido para fuentes de datos",
+                lnkLkTemplates: "Galería de plantillas (PPM y RAG)",
+                lnkLkConnector: "Conector nativo Jira a Looker",
+                tabLkRuleTitle: "⚠️ Regla Crítica de Comunicación",
+                tabLkRuleDesc: "\"Explica los conceptos de bases de datos como analogías de proyectos:\"",
+                tabLkAnalogies: "<strong>Dimensión:</strong> \"Es la etiqueta o nombre, como el nombre de tu proyecto.\"<br><br><strong>Métrica:</strong> \"Es el número puro, el dinero que gastaste o los días.\"",
+                
+                simSecTitle: "Simulador de Traducción ProjectOps",
+                simSecDesc: "Selecciona un dolor típico de un Project Manager para ver cómo lo estructuramos usando nuestra metodología.",
+                simPlaceholder: "-- Selecciona un problema operativo --",
+                
+                simLabelStep1: "Empatizar y Traducir:",
+                simLabelStep2: "Lógica del Flujo:",
+                simLabelStep3: "Instrucción al Usuario (Ejemplo):",
+                
+                footerText: "Generado para la optimización de Project Management Offices (PMO).",
+                
+                pains: {
+                    default: "-- Selecciona un problema operativo --",
+                    updates: "\"Pierdo 3 horas los viernes persiguiendo actualizaciones de estado.\"",
+                    capacity: "\"No sé si mi equipo tiene capacidad para tomar otro proyecto.\"",
+                    slas: "\"Los tickets urgentes se quedan estancados sin que nadie avise.\""
+                },
+                
+                scenarios: {
+                    updates: {
+                        tool: "Apps Script + Workspace",
+                        title: "Reportes de Estado Automatizados",
+                        step1: "Entiendo perfecto, perseguir a la gente los viernes desgasta. Traduciremos esto a: Entrada (Viernes 9am) ➔ Proceso (Buscar datos en Sheet) ➔ Salida (Enviar correo a los responsables).",
+                        step2: "Crearemos un pequeño robot. CUANDO sea viernes a las 9 am ➔ REVISAMOS tu tabla de proyectos ➔ ENTONCES el robot redacta y envía un correo pidiendo la actualización solo a los que tienen tareas pendientes.",
+                        step3: "Ve a tu Google Sheet. En el menú superior, haz clic en Extensiones, luego en Apps Script. Borra todo el texto que veas ahí. Te pasaré un código; la primera línea (function enviarCorreos) es la que le da la orden al robot de arrancar..."
+                    },
+                    capacity: {
+                        tool: "Jira + Google Sheets",
+                        title: "Matriz de Capacidad Sincronizada",
+                        step1: "Es estresante asignar trabajo a ciegas. Traduciremos esto a: Entrada (Tickets de Jira) ➔ Proceso (Agrupar por persona en Sheet) ➔ Salida (Gráfico de barras de carga laboral).",
+                        step2: "Haremos un espejo de tu Jira. CUANDO tu equipo actualice un ticket ➔ REVISAMOS la conexión ➔ ENTONCES tu Google Sheet se actualiza solo, mostrándote en un gráfico quién está en rojo y quién en verde.",
+                        step3: "Vamos a conectar las herramientas. Abre tu Google Sheet, ve a Extensiones ➔ Descargar complementos. Busca 'Jira Cloud' y haz clic en Instalar. Esto creará un puente seguro..."
+                    },
+                    slas: {
+                        tool: "Jira Automation",
+                        title: "Escalación Automática de Bloqueos",
+                        step1: "Perder SLAs por falta de visibilidad es un dolor clásico. Traduciremos esto a: Entrada (Ticket estancado) ➔ Proceso (Medir tiempo) ➔ Salida (Alerta visual y notificación).",
+                        step2: "Programaremos a Jira como tu asistente. CUANDO un ticket lleve más de 24 hrs en estado 'En Progreso' ➔ REVISAMOS si tiene prioridad 'Alta' ➔ ENTONCES el sistema le pone una bandera roja y menciona al líder en un comentario.",
+                        step3: "En tu proyecto de Jira, ve al menú izquierdo, haz clic en Configuración del proyecto, luego busca el botón que dice Automatización. Arriba a la derecha, dale al botón azul Crear regla..."
+                    }
+                }
             },
-            capacity: {
-                tool: "Jira + Google Sheets",
-                title: "Matriz de Capacidad Sincronizada",
-                step1: "Es estresante asignar trabajo a ciegas. Traduciremos esto a: Entrada (Tickets de Jira) ➔ Proceso (Agrupar por persona en Sheet) ➔ Salida (Gráfico de barras de carga laboral).",
-                step2: "Haremos un espejo de tu Jira. CUANDO tu equipo actualice un ticket ➔ REVISAMOS la conexión ➔ ENTONCES tu Google Sheet se actualiza solo, mostrándote en un gráfico quién está en rojo y quién en verde.",
-                step3: "Vamos a conectar las herramientas. Abre tu Google Sheet, ve a Extensiones ➔ Descargar complementos. Busca 'Jira Cloud' y haz clic en Instalar. Esto creará un puente seguro..."
-            },
-            slas: {
-                tool: "Jira Automation",
-                title: "Escalación Automática de Bloqueos",
-                step1: "Perder SLAs por falta de visibilidad es un dolor clásico. Traduciremos esto a: Entrada (Ticket estancado) ➔ Proceso (Medir tiempo) ➔ Salida (Alerta visual y notificación).",
-                step2: "Programaremos a Jira como tu asistente. CUANDO un ticket lleve más de 24 hrs en estado 'En Progreso' ➔ REVISAMOS si tiene prioridad 'Alta' ➔ ENTONCES el sistema le pone una bandera roja y menciona al líder en un comentario.",
-                step3: "En tu proyecto de Jira, ve al menú izquierdo, haz clic en Configuración del proyecto, luego busca el botón que dice Automatización. Arriba a la derecha, dale al botón azul Crear regla..."
+            en: {
+                headerTitle: "⚙️ ProjectOps Master",
+                headerSub: "Translating operational chaos into logical, automated workflows.",
+                modeText: "Non-Technical Mentor",
+                
+                metTitle: "The 4-Step Method",
+                metDesc: "As a ProjectOps Master, every interaction with an overwhelmed Project Manager must follow this strict framework. Our goal is to take them by the hand from \"I have this manual issue\" to \"I automated it\", without technical jargon.",
+                
+                step1Title: "1. Empathize and Translate",
+                step1Desc: "Identify the inefficiency. Translate the human problem into a simple logic of \"Input ➔ Process ➔ Output\".",
+                step2Title: "2. Flow Logic",
+                step2Desc: "Explain the conceptual blueprint in everyday PM language before opening any tool interface.",
+                step3Title: "3. Step-by-Step Guide",
+                step3Desc: "Assume they are opening it for the first time. Bold the buttons: <strong>Settings</strong> ➔ <strong>Rules</strong>.",
+                step4Title: "4. Official Sources",
+                step4Desc: "Provide the exact verified link so they can look at official screenshots and dive deeper.",
+                
+                chartSecTitle: "The Impact of Automation",
+                chartSecDesc: "Why we do this: Visualize the dramatic reduction of administrative hours once we implement logical flows. PMs regain their time to focus on strategy.",
+                chartLabelManual: "Administrative Hours (Manual Flow)",
+                chartLabelAuto: "Administrative Hours (Automated Flow)",
+                chartAxisY: "Hours lost per PM",
+                chartWeeks: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                
+                kbSecTitle: "Knowledge Base and Rules",
+                kbSecDesc: "Free, popular, and verified resources to optimize PM workflows. Select a category to see links and critical communication rules.",
+                
+                tabJiraTitle: "Workflow Automation & Governance in Jira",
+                tabJiraRef: "Verified Resources",
+                lnkJiraGuide: "Getting started guide for automation rules",
+                lnkJiraTemplates: "Ready-to-clone templates library",
+                tabJiraRuleTitle: "⚠️ Critical Communication Rule",
+                tabJiraRuleDesc: "\"Don't just state the Trigger. Structure it like a recipe:\"",
+                tabJiraFormula: "\"WHEN this happens...<br>➔ IF it meets this condition...<br>➔ THEN the system does this\"",
+                
+                tabSheetsTitle: "Time & Capacity Control (Jira + Sheets)",
+                tabSheetsRef: "Verified Resources",
+                lnkSheetsSync: "Official data synchronization for KPIs and diagrams",
+                tabSheetsTipTitle: "💡 ProjectOps Tip",
+                tabSheetsTipDesc: "Explain this as \"creating a mirror\". What happens in Jira reflects in Sheets automatically, letting you use known Excel formulas without affecting the team's live data.",
+                
+                tabWsTitle: "Management & Communication in Google Workspace",
+                tabWsRef: "Verified Resources",
+                lnkWsOverview: "Intro to Google Apps Script for macros",
+                lnkWsAutomation: "Automate status reports via email",
+                lnkWsAppsheet: "AppSheet: No-code tracking tools",
+                tabWsRuleTitle: "⚠️ Critical Communication Rule",
+                tabWsRuleDesc: "\"If the solution requires a script, NEVER present the code on its own.\"",
+                tabWsBullets: "<li>Explain what each line does in plain language.</li><li>Give the exact path: <strong>Extensions</strong> ➔ <strong>Apps Script</strong>.</li><li>Tell them explicitly: \"delete everything there and paste this\".</li>",
+                
+                tabLkTitle: "Project Health Dashboards (Looker Studio)",
+                tabLkRef: "Verified Resources",
+                lnkLkGuide: "Quick start guide for connecting data sources",
+                lnkLkTemplates: "Templates gallery (PPM and RAG status)",
+                lnkLkConnector: "Jira to Looker Studio native connector",
+                tabLkRuleTitle: "⚠️ Critical Communication Rule",
+                tabLkRuleDesc: "\"Explain database concepts as project analogies:\"",
+                tabLkAnalogies: "<strong>Dimension:</strong> \"It's the label or name, like your project name or owner.\"<br><br><strong>Metric:</strong> \"It's the raw number, like the money spent or days elapsed.\"",
+                
+                simSecTitle: "ProjectOps Translation Simulator",
+                simSecDesc: "Select a typical PM pain point to see how we structure it using our methodology.",
+                simPlaceholder: "-- Select an operational pain point --",
+                
+                simLabelStep1: "Empathize and Translate:",
+                simLabelStep2: "Flow Logic:",
+                simLabelStep3: "User Instruction (Example):",
+                
+                footerText: "Generated for the optimization of Project Management Offices (PMO).",
+                
+                pains: {
+                    default: "-- Select an operational pain point --",
+                    updates: "\"I waste 3 hours on Fridays chasing status updates.\"",
+                    capacity: "\"I don't know if my team has capacity to take on another project.\"",
+                    slas: "\"Urgent tickets get stuck with nobody getting notified.\""
+                },
+                
+                scenarios: {
+                    updates: {
+                        tool: "Apps Script + Workspace",
+                        title: "Automated Status Reports",
+                        step1: "I completely understand, chasing people on Fridays is exhausting. We will translate this into: Input (Friday 9am) ➔ Process (Retrieve data from Sheet) ➔ Output (Send email to owners).",
+                        step2: "We'll build a small robot. WHEN it's Friday at 9 am ➔ WE CHECK your project tracker sheet ➔ THEN the robot drafts and sends an email request only to those with pending updates.",
+                        step3: "Go to your Google Sheet. On the top menu, click Extensions, then Apps Script. Clear out any code you see there. I will give you a script; the first line (function enviarCorreos) is what commands the robot to start..."
+                    },
+                    capacity: {
+                        tool: "Jira + Google Sheets",
+                        title: "Synchronized Capacity Matrix",
+                        step1: "Assigning work blindly is stressful. We will translate this into: Input (Jira Tickets) ➔ Process (Group by owner in Sheet) ➔ Output (Workload bar chart).",
+                        step2: "We will build a mirror for your Jira. WHEN your team updates a ticket ➔ WE CHECK the sync connection ➔ THEN your Google Sheet updates itself, showing a chart with who is in the red and who is in the green.",
+                        step3: "Let's connect the tools. Open your Google Sheet, go to Extensions ➔ Get add-ons. Search for 'Jira Cloud' and click Install. This will build a secure bridge..."
+                    },
+                    slas: {
+                        tool: "Jira Automation",
+                        title: "Automated Blocking Escalations",
+                        step1: "Missing SLAs due to lack of visibility is a classic. We'll translate this into: Input (Stuck ticket) ➔ Process (Measure elapsed time) ➔ Output (Visual alert & notification).",
+                        step2: "We'll set Jira up as your assistant. WHEN a ticket is stuck in 'In Progress' for over 24 hours ➔ WE CHECK if it has 'High' priority ➔ THEN the system flags it red and mentions the lead in a comment.",
+                        step3: "In your Jira project, go to the left sidebar menu, click Project settings, then look for the button labeled Automation. On the top right, click the blue Create rule button..."
+                    }
+                }
             }
         };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            document.getElementById('lang-es').className = lang === 'es' ? 'px-3 py-1 rounded text-xs font-bold transition-all bg-amber-600 text-white' : 'px-3 py-1 rounded text-xs font-bold transition-all text-stone-400 hover:text-white';
+            document.getElementById('lang-en').className = lang === 'en' ? 'px-3 py-1 rounded text-xs font-bold transition-all bg-amber-600 text-white' : 'px-3 py-1 rounded text-xs font-bold transition-all text-stone-400 hover:text-white';
+
+            const dictionary = i18n[lang];
+
+            document.getElementById('header-title').innerHTML = dictionary.headerTitle;
+            document.getElementById('header-sub').innerHTML = dictionary.headerSub;
+            document.getElementById('text-mode').innerHTML = dictionary.modeText;
+
+            document.getElementById('met-title').innerHTML = dictionary.metTitle;
+            document.getElementById('met-desc').innerHTML = dictionary.metDesc;
+            document.getElementById('step1-title').innerHTML = dictionary.step1Title;
+            document.getElementById('step1-desc').innerHTML = dictionary.step1Desc;
+            document.getElementById('step2-title').innerHTML = dictionary.step2Title;
+            document.getElementById('step2-desc').innerHTML = dictionary.step2Desc;
+            document.getElementById('step3-title').innerHTML = dictionary.step3Title;
+            document.getElementById('step3-desc').innerHTML = dictionary.step3Desc;
+            document.getElementById('step4-title').innerHTML = dictionary.step4Title;
+            document.getElementById('step4-desc').innerHTML = dictionary.step4Desc;
+
+            document.getElementById('chart-section-title').innerHTML = dictionary.chartSecTitle;
+            document.getElementById('chart-section-desc').innerHTML = dictionary.chartSecDesc;
+
+            document.getElementById('kb-section-title').innerHTML = dictionary.kbSecTitle;
+            document.getElementById('kb-section-desc').innerHTML = dictionary.kbSecDesc;
+
+            document.getElementById('tab-jira-title').innerHTML = dictionary.tabJiraTitle;
+            document.getElementById('tab-jira-ref-title').innerHTML = dictionary.tabJiraRef;
+            document.getElementById('lnk-jira-guide').innerHTML = dictionary.lnkJiraGuide;
+            document.getElementById('lnk-jira-templates').innerHTML = dictionary.lnkJiraTemplates;
+            document.getElementById('tab-jira-rule-title').innerHTML = dictionary.tabJiraRuleTitle;
+            document.getElementById('tab-jira-rule-desc').innerHTML = dictionary.tabJiraRuleDesc;
+            document.getElementById('tab-jira-formula').innerHTML = dictionary.tabJiraFormula;
+
+            document.getElementById('tab-sheets-title').innerHTML = dictionary.tabSheetsTitle;
+            document.getElementById('tab-sheets-ref-title').innerHTML = dictionary.tabSheetsRef;
+            document.getElementById('lnk-sheets-sync').innerHTML = dictionary.lnkSheetsSync;
+            document.getElementById('tab-sheets-tip-title').innerHTML = dictionary.tabSheetsTipTitle;
+            document.getElementById('tab-sheets-tip-desc').innerHTML = dictionary.tabSheetsTipDesc;
+
+            document.getElementById('tab-ws-title').innerHTML = dictionary.tabWsTitle;
+            document.getElementById('tab-ws-ref-title').innerHTML = dictionary.tabWsRef;
+            document.getElementById('lnk-ws-overview').innerHTML = dictionary.lnkWsOverview;
+            document.getElementById('lnk-ws-automation').innerHTML = dictionary.lnkWsAutomation;
+            document.getElementById('lnk-ws-appsheet').innerHTML = dictionary.lnkWsAppsheet;
+            document.getElementById('tab-ws-rule-title').innerHTML = dictionary.tabWsRuleTitle;
+            document.getElementById('tab-ws-rule-desc').innerHTML = dictionary.tabWsRuleDesc;
+            document.getElementById('tab-ws-bullets').innerHTML = dictionary.tabWsBullets;
+
+            document.getElementById('tab-lk-title').innerHTML = dictionary.tabLkTitle;
+            document.getElementById('tab-lk-ref-title').innerHTML = dictionary.tabLkRef;
+            document.getElementById('lnk-lk-guide').innerHTML = dictionary.lnkLkGuide;
+            document.getElementById('lnk-lk-templates').innerHTML = dictionary.lnkLkTemplates;
+            document.getElementById('lnk-lk-connector').innerHTML = dictionary.lnkLkConnector;
+            document.getElementById('tab-lk-rule-title').innerHTML = dictionary.tabLkRuleTitle;
+            document.getElementById('tab-lk-rule-desc').innerHTML = dictionary.tabLkRuleDesc;
+            document.getElementById('tab-lk-analogies').innerHTML = dictionary.tabLkAnalogies;
+
+            document.getElementById('sim-section-title').innerHTML = dictionary.simSecTitle;
+            document.getElementById('sim-section-desc').innerHTML = dictionary.simSecDesc;
+            document.getElementById('lbl-step1').innerHTML = dictionary.simLabelStep1;
+            document.getElementById('lbl-step2').innerHTML = dictionary.simLabelStep2;
+            document.getElementById('lbl-step3').innerHTML = dictionary.simLabelStep3;
+            document.getElementById('footer-text').innerHTML = dictionary.footerText;
+
+            buildDropdown();
+            updateChart();
+        }
+
+        function buildDropdown() {
+            const selector = document.getElementById('pain-selector');
+            const currentSelected = selector.value || 'default';
+            selector.innerHTML = '';
+
+            const dictionary = i18n[currentLang];
+            
+            for (const [key, text] of Object.entries(dictionary.pains)) {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = text;
+                if (key === currentSelected) {
+                    opt.selected = true;
+                }
+                selector.appendChild(opt);
+            }
+
+            renderScenario(currentSelected);
+        }
+
+        function renderScenario(key) {
+            const solContainer = document.getElementById('solution-container');
+            if (!key || key === 'default') {
+                solContainer.classList.add('hidden');
+                return;
+            }
+            const data = i18n[currentLang].scenarios[key];
+            if (data) {
+                document.getElementById('sol-tool').textContent = data.tool;
+                document.getElementById('sol-title').textContent = data.title;
+                document.getElementById('sol-step1').textContent = data.step1;
+                document.getElementById('sol-step2').textContent = data.step2;
+                document.getElementById('sol-step3').textContent = `"${data.step3}"`;
+                solContainer.classList.remove('hidden');
+            } else {
+                solContainer.classList.add('hidden');
+            }
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => {
@@ -330,25 +627,19 @@
             document.getElementById('btn-' + tabId).classList.add('active');
         }
 
-        const painSelector = document.getElementById('pain-selector');
-        const solContainer = document.getElementById('solution-container');
-        
-        painSelector.addEventListener('change', function() {
-            const val = this.value;
-            if (val === 'default') {
-                solContainer.classList.add('hidden');
-                return;
-            }
+        function updateChart() {
+            if (!impactChart) return;
+            const dictionary = i18n[currentLang];
             
-            const data = scenarioData[val];
-            document.getElementById('sol-tool').textContent = data.tool;
-            document.getElementById('sol-title').textContent = data.title;
-            document.getElementById('sol-step1').textContent = data.step1;
-            document.getElementById('sol-step2').textContent = data.step2;
-            document.getElementById('sol-step3').textContent = `"${data.step3}"`;
-            
-            solContainer.classList.remove('hidden');
-            solContainer.style.animation = 'fadeIn 0.5s ease-out';
+            impactChart.data.labels = dictionary.chartWeeks;
+            impactChart.data.datasets[0].label = dictionary.chartLabelManual;
+            impactChart.data.datasets[1].label = dictionary.chartLabelAuto;
+            impactChart.options.scales.y.title.text = dictionary.chartAxisY;
+            impactChart.update();
+        }
+
+        document.getElementById('pain-selector').addEventListener('change', function() {
+            renderScenario(this.value);
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -357,13 +648,13 @@
             Chart.defaults.font.family = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
             Chart.defaults.color = '#78716c';
 
-            new Chart(ctx, {
+            impactChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5', 'Semana 6'],
+                    labels: i18n.es.chartWeeks,
                     datasets: [
                         {
-                            label: 'Horas Administrativas (Flujo Manual)',
+                            label: i18n.es.chartLabelManual,
                             data: [15, 14, 16, 15, 15, 16],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -372,7 +663,7 @@
                             fill: true
                         },
                         {
-                            label: 'Horas Administrativas (Flujo Automatizado)',
+                            label: i18n.es.chartLabelAuto,
                             data: [15, 10, 5, 2, 0.5, 0.5],
                             borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -409,7 +700,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Horas perdidas por PM',
+                                text: i18n.es.chartAxisY,
                                 font: { weight: 'bold' }
                             },
                             grid: {
@@ -431,6 +722,8 @@
                     }
                 }
             });
+
+            setLanguage('es');
         });
     </script>
 </body>
